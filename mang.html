@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: rgb(173, 230, 180);
+            border: 1px solid black;
+            text-align: center;
+            line-height: 100px;
+            cursor: move;
+        }
+        .target {
+            width: 100px;
+            height: 100px;
+            background-color: rgb(219, 17, 118);
+            border: 1px solid black;
+            text-align: center;
+            line-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box" draggable="true">Kond</div>
+        <div class="box" draggable="true">Box 1</div>
+        <div class="box" draggable="true">Box 2</div>
+        <div class="box" draggable="true">Box 3</div>
+        <div class="target">Mees</div>
+    </div>
+
+    <script>
+        const boxes = document.querySelectorAll('.box');
+        const target = document.querySelector('.target');
+
+        boxes.forEach(box => {
+            box.addEventListener('dragstart', dragStart);
+        });
+
+        target.addEventListener('dragover', dragOver);
+        target.addEventListener('drop', drop);
+
+        function dragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.innerHTML);
+        }
+
+        function dragOver(e) {
+            e.preventDefault();
+        }
+
+        function drop(e) {
+            e.preventDefault();
+            const data = e.dataTransfer.getData('text/plain');
+            if (target.innerHTML === "") {
+                target.innerHTML = data;
+            } else {
+                target.innerHTML += " + " + data;
+            }
+            const box = document.createElement('div');
+            box.className = 'box';
+            box.draggable = true;
+            box.innerHTML = data;
+            box.addEventListener('dragstart', dragStart);
+            e.target.parentNode.insertBefore(box, e.target);
+        }
+    </script>
+</body>
+</html>
